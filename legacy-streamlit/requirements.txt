@@ -1,0 +1,18 @@
+streamlit
+pandas
+numpy
+Pillow
+pytesseract
+pdf2image
+opencv-python-headless
+
+# LangChain packages
+langchain
+langchain-community
+langchain-text-splitters
+sentence-transformers
+faiss-cpu
+torch
+huggingface-hub
+pypdf
+python-dotenv
