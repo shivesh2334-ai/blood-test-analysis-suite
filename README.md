@@ -1,15 +1,35 @@
-# Blood Test Analysis Suite
+# MedLab Blood Test Analysis Suite
 
-Adapted from https://github.com/shivesh2334-ai/4Blood-trst-rag-ds (MIT). All seven original source files are preserved under `legacy-streamlit/`; original license retained at root.
+Live: https://blood-test-analysis-suite.vercel.app/
 
-The Vercel-compatible static interface asks for analysis type before displaying relevant laboratory input fields: anemia, renal, liver, thyroid, lipid, diabetes, vitamin D, vitamin B12, cancer and rheumatoid arthritis.
+Adapted from https://github.com/shivesh2334-ai/4Blood-trst-rag-ds, commit e87a41223ea4b130e4054de358bfd2477e69ccf2. The original seven source files and license are preserved under `legacy-streamlit/` and at the root.
 
-Enter laboratory values, exact units and optional paired report-specific reference limits. Blank tests are excluded. Results are compared only against supplied intervals, with no diagnosis, automatic unit conversion or treatment recommendation. Reports export to JSON or print/PDF. Changing inputs invalidates the displayed analysis. Values stay in memory only; no backend or persistence.
+## Active application
 
-Cancer and rheumatoid arthritis context is based on NCI tumor marker guidance and NICE NG100, linked in the interface. This is a laboratory comparison tool, not a validated clinical diagnostic system.
+- All ten focus panels retained: anemia, renal, liver, thyroid, lipids, diabetes, vitamin D, B12, cancer and rheumatoid arthritis.
+- Image OCR (JPG/JPEG/PNG), direct text extraction from PDFs, scanned-PDF OCR and text paste/import. Pinned browser libraries: Tesseract.js 7.0.0 / core 7.0.0 and PDF.js 6.4.299. Libraries/models load on demand from public CDNs; report content stays in the browser.
+- Every populated manual or parsed row enters the same review/analysis dataset. Switching focus adds relevant fields without losing earlier values. More than 80 original parameters, coagulation, immunology, new markers and custom tests are supported.
+- Correct/delete values, units and reference intervals. Parsed values require explicit verification; unresolved lines require acknowledgment. Original lines, provenance and bounded/qualitative values remain visible. Duplicates are retained and excluded from ambiguous cross-test rules.
+- Unit-aware critical alerts; category analysis, supported pattern recognition, differential considerations, next-step/follow-up suggestions. Missing/unknown results are not marked normal. No automatic prescription or probability claim.
+- Source-linked RAG insights and knowledge search: a local TF-IDF vector index with cosine similarity retrieves curated clinical passages, then produces an extractive source-grounded answer. This replaces the original FAISS/MiniLM runtime in the browser, preserving knowledge retrieval without requiring a server or key. It is not a generative LLM. Original FAISS/MiniLM implementation remains runnable separately with Streamlit.
+- Screening/Standard/Comprehensive/Academic depth, in-memory report history, full JSON export and print/PDF.
 
-## Deployment
-Import this repository into Vercel. Framework: Other. No install/build commands; output directory `.`. No API keys required. The original Streamlit OCR/RAG implementation is archived, not exposed as a functioning Vercel backend. Run the legacy app separately with Streamlit and its own dependencies if needed.
+## Clinical boundaries
 
-## Local check
-`python -m http.server 8000` from repository root. Visit http://localhost:8000.
+Report-specific intervals override optional adult seed intervals. The original seed catalog is retained with corrected vitamin D, one-sided HDL/eGFR limits. These seeds are illustrative and require verification. Units are normalized only for explicitly supported conversions. Unsupported units can still be compared against supplied report intervals, but are excluded from numerical pattern rules. Lp(a) mass/molar units are not interconverted.
+
+Adult diagnostic rules are disabled for children and pregnancy. GFR categories do not establish CKD chronicity. Tumor markers do not diagnose/exclude cancer; RF/anti-CCP do not independently establish RA. Source links and concise paraphrases are in `knowledge.js`; reviewed 1 November 2026. Clinical rule outputs require clinician validation.
+
+## Vercel
+
+Static framework, no install/build command, output `.`. No patient backend, API keys or permanent storage. CSP permits only the pinned dependency host and OCR language-model host in addition to self/blob requirements. OCR downloads require internet connectivity; English language only. File limits: 20 MB, 20 PDF pages, 25 megapixels per OCR canvas. For an incomplete text layer choose Force OCR.
+
+## Validation
+
+`node --test tests/engine.test.cjs`
+
+Regression coverage includes parsing aliases, duplicates, unknown lines, bounded and qualitative results, unit normalization, cross-panel inclusion, critical alerts, kidney staging, absent FT4, age/pregnancy restrictions and source retrieval. Browser verification additionally covers upload/OCR, PDF extraction, review and report generation.
+
+## Original Streamlit workflow
+
+`pip install -r legacy-streamlit/requirements.txt` then `streamlit run legacy-streamlit/app.py` from that directory with system Tesseract/Poppler and sufficient model memory. The original code is preserved unchanged for compatibility/reference; use the active web interface for corrected interpretation rules.
