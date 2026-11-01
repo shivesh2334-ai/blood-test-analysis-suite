@@ -28,7 +28,7 @@ Static framework, no install/build command, output `.`. No patient backend, API 
 
 `node --test tests/engine.test.cjs`
 
-Regression coverage includes parsing aliases, duplicates, unknown lines, bounded and qualitative results, unit normalization, cross-panel inclusion, critical alerts, kidney staging, absent FT4, age/pregnancy restrictions and source retrieval. Browser verification additionally covers upload/OCR, PDF extraction, review and report generation.
+Regression coverage includes parsing aliases, duplicates, unknown lines, bounded and qualitative results, unit normalization, cross-panel inclusion, critical alerts, kidney staging, absent FT4, age/pregnancy restrictions and source retrieval. Browser verification covers synthetic image OCR, text-PDF extraction, scanned-PDF OCR, correction/review, mixed manual/parsed cross-panel analysis and knowledge search. The automation file chooser timed out, so extraction was tested through the bundled synthetic demos using the same File-processing code.
 
 ## Original Streamlit workflow
 
